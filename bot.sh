@@ -1,10 +1,15 @@
 #!/bin/bash
 
-apt update && apt install socat curl -y
+apt update && apt install socat curl net-tools -y
 
 read -p "Domínio: " d
 read -p "ID: " i
 read -p "Token: " t
+
+if netstat -tuln | grep ':80 ' > /dev/null; then
+    echo "❌ Porta 80 está ocupada. Libere a porta antes de continuar."
+    exit 1
+fi
 
 if [ ! -f ~/.acme.sh/acme.sh ]; then
     curl https://get.acme.sh | sh
